@@ -1,0 +1,9 @@
+.menu-link {
+    display: block;
+    margin: 0 auto;
+}
+
+.nav-link:hover {
+        background-color: #343a40;
+        color: #ffffff;
+}
