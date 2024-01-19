@@ -7,8 +7,6 @@ const router = express.Router();
 router.post("/adminlogin", (req, res) => {
   const sql = "SELECT * FROM admin WHERE email = ? and password =  ?";
   connection.query(sql, [req.body.email, req.body.password], (err, result) => {
-    // if (err) return res.json({ loginStatus: false, Error: "Query error" });
-
     if (err) {
       console.error(err);
       return res
@@ -31,6 +29,14 @@ router.post("/adminlogin", (req, res) => {
     } else {
       return res.json({ loginStatus: false, Error: "Wrong email or password" });
     }
+  });
+});
+
+router.post("/add_course", (req, res) => {
+  const sql = "INSERT INTO course (`name`) VALUES (?)";
+  connection.query(sql, [req.body.course], (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true });
   });
 });
 
