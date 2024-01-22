@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AddCourse = () => {
-  const [course, setCourse] = useState();
+  const [course, setCourse] = useState("");
   const navigate = useNavigate();
   const makeCourse = (e) => setCourse(e.target.value);
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://localhost:5050/auth/add_course", { course })
+      .post("http://localhost:5050/auth/add_course", { course })
 
       .then((result) => {
         console.log(result.data);

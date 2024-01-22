@@ -6,7 +6,7 @@ const port = 5050;
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5174", "https://localhost:5174"],
+    origin: ["http://localhost:5173", "https://localhost:5173"],
     methods: ["GET", "POST", "PUT"],
     credentials: true,
     optionsSuccessStatus: 204,
