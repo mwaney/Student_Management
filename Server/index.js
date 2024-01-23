@@ -14,6 +14,7 @@ app.use(
 );
 app.use(express.json());
 app.use("/auth", adminRouter);
+app.use(express.static("Public"));
 
 app.listen(port, () => {
   console.log(`listening at port ${port}...`);

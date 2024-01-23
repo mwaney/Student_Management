@@ -1,6 +1,9 @@
 import express from "express";
 import connection from "../utils/db_connection.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import multer from "multer";
+import path from "path";
 
 const router = express.Router();
 
@@ -8,7 +11,7 @@ router.post("/adminlogin", (req, res) => {
   const sql = "SELECT * FROM admin WHERE email = ? and password =  ?";
   connection.query(sql, [req.body.email, req.body.password], (err, result) => {
     if (err) {
-      console.error(err);
+      console.error("Error executing login query", err);
       return res
         .status(500)
         .json({ loginStatus: false, error: "Server error" });
@@ -40,17 +43,67 @@ router.post("/add_course", (req, res) => {
   });
 });
 
-router.post("/add_student", (req, res) => {
-  const sql =
-    "INSERT INTO student (`name`, `email`, `password`, `year`, `course_id`, `image`) VALUES (?)";
-  connection.query(sql, [req.body.name, req.body.course], (err, result) => {
+// Image Upload Code
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "Public/Images");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
+// End of upload Logic
+
+router.post("/add_student", upload.single("image"), (req, res) => {
+  const sql = `INSERT INTO students 
+  (name, email, password, address, year, image, course_id) 
+  VALUES (?)`;
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) return res.json({ Status: false, Error: "Query Error" });
-    return res.json({ Status: true });
+    const values = [
+      req.body.name,
+      req.body.email,
+      hash,
+      req.body.address,
+      req.body.year,
+      req.file.filename,
+      req.body.course_id,
+    ];
+
+    connection.query(sql, [values], (err, result) => {
+      if (err)
+        return res.json({
+          Status: false,
+          Error: "Query Error",
+          details: err,
+        });
+      return res.json({ Status: true });
+    });
+    console.log("SQL Query:", sql, values);
   });
 });
 
+// GET logic for the course
 router.get("/course", (req, res) => {
   const sql = "SELECT * FROM course";
+  connection.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// GET LOGIC for students
+
+router.get("/students", (req, res) => {
+  const sql = "SELECT * FROM students";
   connection.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: "Query Error" });
     return res.json({ Status: true, Data: result });

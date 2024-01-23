@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./AddStudent.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddStudent = () => {
+  const navigate = useNavigate();
   const [student, setStudent] = useState({
     name: "",
     email: "",
     password: "",
     year: "",
     address: "",
-    course: "",
+    course_id: "",
     image: "",
   });
   const [course, setCourse] = useState([]);
@@ -29,9 +31,24 @@ const AddStudent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", student.name);
+    formData.append("email", student.email);
+    formData.append("password", student.password);
+    formData.append("year", student.year);
+    formData.append("address", student.address);
+    formData.append("course_id", student.course_id);
+    formData.append("image", student.image);
+
     axios
-      .post("http://localhost:5050/auth/add_student", student)
-      .then((result) => console.log(result.data))
+      .post("http://localhost:5050/auth/add_student", formData)
+      .then((result) => {
+        if (result.data.Status) {
+          navigate("/dashboard/student");
+        } else {
+          alert(result.data.Error);
+        }
+      })
       .catch((err) => console.error(err));
   };
 
@@ -122,7 +139,23 @@ const AddStudent = () => {
               }
             />
           </div>
+
           <div className='col-12'>
+            <label htmlFor='inputGroupFile01' className='form-label'>
+              Select Image
+            </label>
+            <input
+              type='file'
+              id='inputGroupFile01'
+              className='form-control rounded-0'
+              name='image'
+              onChange={(e) =>
+                setStudent({ ...student, image: e.target.files[0] })
+              }
+            />
+          </div>
+
+          <div className='col-12 mb-3'>
             <label htmlFor='courseInput' className='form-label'>
               Course
             </label>
@@ -131,7 +164,7 @@ const AddStudent = () => {
               id='course'
               className='form-select'
               onChange={(e) =>
-                setStudent({ ...student, course: e.target.value })
+                setStudent({ ...student, course_id: e.target.value })
               }
             >
               {course &&
@@ -142,19 +175,7 @@ const AddStudent = () => {
                 ))}
             </select>
           </div>
-          <div className='col-12 mb-3'>
-            <label htmlFor='inputGroupFile01' className='form-label'>
-              Select Image
-            </label>
-            <input
-              type='file'
-              id='inputGroupFile01'
-              className='form-control rounded-0'
-              onChange={(e) =>
-                setStudent({ ...student, image: e.target.files[0] })
-              }
-            />
-          </div>
+
           <div className='col-12'>
             <button type='submit' className='btn btn-primary w-100'>
               Add Employee
