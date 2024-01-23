@@ -67,7 +67,15 @@ router.post("/add_student", upload.single("image"), (req, res) => {
   (name, email, password, address, year, image, course_id) 
   VALUES (?)`;
   bcrypt.hash(req.body.password, 10, (err, hash) => {
-    if (err) return res.json({ Status: false, Error: "Query Error" });
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+
+    let course_id = req.body.course_id;
+
+    // Check if course_id is 'null' and set it to null in that case
+    if (course_id === "null") {
+      course_id = null;
+    }
     const values = [
       req.body.name,
       req.body.email,

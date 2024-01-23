@@ -11,7 +11,7 @@ const AddStudent = () => {
     password: "",
     year: "",
     address: "",
-    course_id: "",
+    course_id: null,
     image: "",
   });
   const [course, setCourse] = useState([]);
@@ -47,6 +47,7 @@ const AddStudent = () => {
           navigate("/dashboard/student");
         } else {
           alert(result.data.Error);
+          console.log(result.data.details);
         }
       })
       .catch((err) => console.error(err));
@@ -167,6 +168,7 @@ const AddStudent = () => {
                 setStudent({ ...student, course_id: e.target.value })
               }
             >
+              <option value=''>Select Course</option>
               {course &&
                 course.map((item) => (
                   <option key={item.id} value={item.id}>

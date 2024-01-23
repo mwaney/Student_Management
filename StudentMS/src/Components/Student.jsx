@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import "./student.css";
 
 const Student = () => {
   const [student, setStudent] = useState([]);
@@ -17,6 +18,7 @@ const Student = () => {
       })
       .catch((err) => console.error(err));
   }, []);
+
   return (
     <div className='px-5 mt-3'>
       <div className='d-flex justify-content-center'>
@@ -41,11 +43,13 @@ const Student = () => {
           <tbody>
             {student.map((item) => (
               <tr key={item.id}>
+                {console.log(item)}
                 <td>{item.name}</td>
                 <td>
                   <img
                     src={`http://localhost:5050/Images/${item.image}`}
                     alt=''
+                    className='student_image'
                   />
                 </td>
                 <td>{item.email}</td>
@@ -53,8 +57,8 @@ const Student = () => {
                 <td>{item.address}</td>
                 <td>{item.course}</td>
                 <td>
-                  <button>Edit</button>
-                  <button>Delete</button>
+                  <button className='btn btn-info me-2'>Edit</button>
+                  <button className='btn btn-danger'>Delete</button>
                 </td>
               </tr>
             ))}
