@@ -12,6 +12,7 @@ import AddStudent from "./Components/AddStudent";
 import EditStudent from "./Components/EditStudent";
 import Front from "./Components/Front";
 import StudentLogin from "./Components/StudentLogin";
+import StudentDetail from "./Components/StudentDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/front' element={<Front />}></Route>
           <Route path='/adminlogin' element={<Login />}></Route>
           <Route path='/student_login' element={<StudentLogin />}></Route>
+          <Route path='/student_detail/:id' element={<StudentDetail />}></Route>
           <Route path='/dashboard' element={<Dashboard />}>
             <Route path='' element={<Home />}></Route>
             <Route path='/dashboard/student' element={<Student />}></Route>

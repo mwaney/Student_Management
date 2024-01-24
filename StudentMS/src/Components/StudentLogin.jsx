@@ -31,7 +31,7 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         if (result.data.loginStatus) {
-          navigate("/student_detail");
+          navigate("/student_detail/" + result.data.id);
         } else {
           setError(result.data.Error);
           console.log("Login Failed");
