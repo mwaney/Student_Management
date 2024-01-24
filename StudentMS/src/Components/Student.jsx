@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./student.css";
 
 const Student = () => {
+  const navigate = useNavigate();
   const [student, setStudent] = useState([]);
 
   useEffect(() => {
@@ -19,6 +20,18 @@ const Student = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5050/auth/delete_student/${id}`)
+      .then((result) => {
+        if (result.data.Status) {
+          window.location.reload();
+          setStudent(student.filter((item) => item.id !== id));
+        } else {
+          alert(result.data.Error);
+        }
+      });
+  };
   return (
     <div className='px-5 mt-3'>
       <div className='d-flex justify-content-center'>
@@ -55,10 +68,20 @@ const Student = () => {
                 <td>{item.email}</td>
                 <td>{item.year}</td>
                 <td>{item.address}</td>
-                <td>{item.course}</td>
+                <td>{item.course_id}</td>
                 <td>
-                  <button className='btn btn-info me-2'>Edit</button>
-                  <button className='btn btn-danger'>Delete</button>
+                  <Link
+                    to={`/dashboard/edit_student/${item.id}`}
+                    className='btn btn-info me-2'
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className='btn btn-danger'
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

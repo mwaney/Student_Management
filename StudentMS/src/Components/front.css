@@ -1,0 +1,36 @@
+.glassyCard {
+    background: rgba(255, 255, 255, 0.2);
+    /* Adjust the alpha value for transparency */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Adjust the shadow properties */
+    border-radius: 15px;
+    /* Adjust the border-radius for rounded corners */
+    backdrop-filter: blur(5px);
+    /* Adjust the blur value for frosted glass effect */
+}
+
+.glassyButton {
+    &.btn-primary {
+        background-color: rgba(29, 192, 78, 0.8);
+    }
+    /* Admin Button */
+    &.btn-success {
+        background-color: rgba(255, 193, 7, 0.8);
+    }
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease,
+    transform 0.3s ease;
+    /* Hover effect */
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        transform: scale(1.1);
+    }
+}
+
+.standOutHeader {
+    color: #f8b864;
+}

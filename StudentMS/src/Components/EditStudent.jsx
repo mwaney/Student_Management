@@ -1,62 +1,64 @@
-import React, { useEffect, useState } from "react";
-import "./AddStudent.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-const AddStudent = () => {
+const EditStudent = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [student, setStudent] = useState({
     name: "",
     email: "",
-    password: "",
     year: "",
     address: "",
-    course_id: null,
-    image: "",
+    course_id: "",
   });
+
   const [course, setCourse] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:5050/auth/course")
       .then((result) => {
         if (result.data.Status) {
-          console.log(result.data.Data);
           setCourse(result.data.Data);
         } else {
           alert(result.data.Error);
         }
       })
       .catch((err) => console.error(err));
+
+    axios
+      .get(`http://localhost:5050/auth/students/${id}`)
+      .then((result) => {
+        setStudent({
+          ...student,
+          name: result.data.Data[0].name,
+          email: result.data.Data[0].email,
+          year: result.data.Data[0].year,
+          address: result.data.Data[0].address,
+          course_id: result.data.Data[0].course_id,
+        });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", student.name);
-    formData.append("email", student.email);
-    formData.append("password", student.password);
-    formData.append("year", student.year);
-    formData.append("address", student.address);
-    formData.append("course_id", student.course_id);
-    formData.append("image", student.image);
-
+    console.log("Submitting form", student);
     axios
-      .post("http://localhost:5050/auth/add_student", formData)
+      .put(`http://localhost:5050/auth/edit_student/${id}`, student)
       .then((result) => {
         if (result.data.Status) {
           navigate("/dashboard/student");
         } else {
           alert(result.data.Error);
-          console.log(result.data.details);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   };
-
   return (
     <div className='d-flex justify-content-center align-items-center mt-3'>
       <div className='p-3 rounded w-50 border'>
-        <h3 className='text-center'>Add Student</h3>
+        <h3 className='text-center'>Edit Student</h3>
         <form className='row g-1' onSubmit={handleSubmit}>
           <div className='col-12'>
             <label htmlFor='nameInput' className='form-label'>
@@ -68,7 +70,7 @@ const AddStudent = () => {
               className='form-control rounded-0'
               id='nameInput'
               placeholder='Student Name'
-              required
+              value={student.name}
               onChange={(e) => setStudent({ ...student, name: e.target.value })}
             />
           </div>
@@ -83,28 +85,13 @@ const AddStudent = () => {
               id='emailInput'
               placeholder='Enter Email Address'
               autoComplete='off'
-              required
+              value={student.email}
               onChange={(e) =>
                 setStudent({ ...student, email: e.target.value })
               }
             />
           </div>
-          <div className='col-12'>
-            <label htmlFor='passwordInput' className='form-label'>
-              Password
-            </label>
-            <input
-              type='password'
-              name='password'
-              id='passwordInput'
-              required
-              placeholder='Enter Email Address'
-              className='form-control rounded-0'
-              onChange={(e) =>
-                setStudent({ ...student, password: e.target.value })
-              }
-            />
-          </div>
+
           <div className='col-12'>
             <label htmlFor='year' className='form-label'>
               Year
@@ -113,8 +100,8 @@ const AddStudent = () => {
               <select
                 id='yearInput'
                 name='year'
-                required
                 className='form-control rounded-0'
+                value={student.year}
                 onChange={(e) =>
                   setStudent({ ...student, year: e.target.value })
                 }
@@ -139,25 +126,9 @@ const AddStudent = () => {
               placeholder='Mama Ngina St Embu'
               className='form-control rounded-0'
               autoComplete='off'
-              required
+              value={student.address}
               onChange={(e) =>
                 setStudent({ ...student, address: e.target.value })
-              }
-            />
-          </div>
-
-          <div className='col-12'>
-            <label htmlFor='inputGroupFile01' className='form-label'>
-              Select Image
-            </label>
-            <input
-              type='file'
-              id='inputGroupFile01'
-              className='form-control rounded-0'
-              name='image'
-              required
-              onChange={(e) =>
-                setStudent({ ...student, image: e.target.files[0] })
               }
             />
           </div>
@@ -170,7 +141,7 @@ const AddStudent = () => {
               name='course'
               id='course'
               className='form-select'
-              required
+              value={student.course_id}
               onChange={(e) =>
                 setStudent({ ...student, course_id: e.target.value })
               }
@@ -187,7 +158,7 @@ const AddStudent = () => {
 
           <div className='col-12'>
             <button type='submit' className='btn btn-primary w-100'>
-              Add Employee
+              Edit Student
             </button>
           </div>
         </form>
@@ -196,4 +167,4 @@ const AddStudent = () => {
   );
 };
 
-export default AddStudent;
+export default EditStudent;

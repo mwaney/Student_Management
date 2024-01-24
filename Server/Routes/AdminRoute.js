@@ -70,12 +70,6 @@ router.post("/add_student", upload.single("image"), (req, res) => {
     if (err)
       return res.json({ Status: false, Error: "Query Error", details: err });
 
-    let course_id = req.body.course_id;
-
-    // Check if course_id is 'null' and set it to null in that case
-    if (course_id === "null") {
-      course_id = null;
-    }
     const values = [
       req.body.name,
       req.body.email,
@@ -114,6 +108,94 @@ router.get("/students", (req, res) => {
   const sql = "SELECT * FROM students";
   connection.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// GET logic for editing students
+
+router.get("/students/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = `SELECT * FROM students WHERE id =?`;
+  connection.query(sql, [id], (err, result) => {
+    if (err) return res.json({ Status: false, Error: "Query Error" });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// PUT logic for editing students
+router.put("/edit_student/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = `UPDATE students 
+    SET name = ?, email = ?, address = ?, year = ?, course_id = ? 
+    WHERE id = ?`;
+  const values = [
+    req.body.name,
+    req.body.email,
+    req.body.address,
+    req.body.year,
+    req.body.course_id,
+  ];
+  connection.query(sql, [...values, id], (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// GET logic for getting number of admins
+
+router.get("/admin_count", (req, res) => {
+  const sql = "SELECT count(id) as admin from admin";
+  connection.query(sql, (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+    return res.json({ Status: true, Data: result });
+  });
+});
+// GET logic for getting number of students
+
+router.get("/student_count", (req, res) => {
+  const sql = "SELECT count(id) as students from students";
+  connection.query(sql, (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+    return res.json({ Status: true, Data: result });
+  });
+});
+// GET logic for getting number of courses
+router.get("/course_count", (req, res) => {
+  const sql = "SELECT count(id) as courses from course";
+  connection.query(sql, (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// GET logic for fetchin all admins
+router.get("/admin_details", (req, res) => {
+  const sql = "SELECT * FROM admin";
+  connection.query(sql, (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
+    return res.json({ Status: true, Data: result });
+  });
+});
+
+// Logic for Logout
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  return res.json({ Status: true });
+});
+// Delete logic for a student
+
+router.delete("/delete_student/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = `DELETE FROM students WHERE id =?`;
+  connection.query(sql, [id], (err, result) => {
+    if (err)
+      return res.json({ Status: false, Error: "Query Error", details: err });
     return res.json({ Status: true, Data: result });
   });
 });
