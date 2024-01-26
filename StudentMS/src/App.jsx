@@ -15,6 +15,7 @@ import StudentLogin from "./Components/StudentLogin";
 import StudentDetail from "./Components/StudentDetail";
 import { useEffect } from "react";
 import PrivateRoute from "./Components/PrivateRoute";
+import StudentDetailEdit from "./Components/StudentdetailEdit";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           <Route path='/' element={<Front />}></Route>
           <Route path='/adminlogin' element={<Login />}></Route>
           <Route path='/student_login' element={<StudentLogin />}></Route>
+          <Route
+            path='/student/edit_student/:id'
+            element={<StudentDetailEdit />}
+          ></Route>
           <Route
             path='/student_detail/:id'
             element={

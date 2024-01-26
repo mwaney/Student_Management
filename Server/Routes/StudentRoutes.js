@@ -58,19 +58,49 @@ router.post("/student_login", (req, res) => {
   });
 });
 
-router.get("/student_detail/:id", (req, res) => {
-  const sql = "SELECT * FROM students WHERE id = ? ";
-  connection.query(sql, [req.params.id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ Status: false, error: "Server error" });
-    }
-    return res.json(result);
-  });
-});
+// router.get("/student_detail/:id", (req, res) => {
+//   const sql = "SELECT * FROM students WHERE id = ? ";
+//   connection.query(sql, [req.params.id], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ Status: false, error: "Server error" });
+//     }
+//     return res.json(result);
+//   });
+// });
 
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: true });
+});
+
+router.get("/student_detail/:id", (req, res) => {
+  const sql = `
+    SELECT students.*, course.name AS course_name
+    FROM students
+    JOIN course ON students.course_id = course.id
+    WHERE students.id = ?`;
+
+  connection.query(sql, [req.params.id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ Status: false, error: "Server error" });
+    }
+
+    if (result.length === 0) {
+      return res.json({ Status: false, error: "Student not found" });
+    }
+
+    const studentData = {
+      id: result[0].id,
+      name: result[0].name,
+      email: result[0].email,
+      address: result[0].address,
+      year: result[0].year,
+      course: result[0].course_name,
+      image: result[0].image,
+    };
+
+    return res.json([studentData]);
+  });
 });
 
 export { router as studentRouter };

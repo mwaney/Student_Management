@@ -50,12 +50,12 @@ const StudentDetail = () => {
                 <strong>Class:</strong> Year {student.year}
               </p>
               <p>
-                <strong>Course:</strong> {student.course_id}
+                <strong>Course:</strong> {student.course}
               </p>
             </div>
             <div className='links'>
               <Link
-                to={`/dashboard/edit_student/${id}`}
+                to={`/student/edit_student/${id}`}
                 className='btn btn-flip'
                 data-back='Change Me'
                 data-front='Edit'
