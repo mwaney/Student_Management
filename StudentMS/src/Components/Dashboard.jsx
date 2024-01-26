@@ -10,7 +10,8 @@ const Dashboard = () => {
   const handleLogOut = () => {
     axios.get("http://localhost:5050/auth/logout").then((result) => {
       if (result.data.Status) {
-        navigate("/adminlogin");
+        localStorage.removeItem("valid");
+        navigate("/");
       }
     });
   };
@@ -71,7 +72,7 @@ const Dashboard = () => {
               </li>
               <li className='w-100' onClick={handleLogOut}>
                 <Link
-                  to='/adminlogin'
+                  to='/front'
                   className='nav-link navigation-link px-0 align-middle text-white'
                 >
                   <i className='fs-4 bi-power ms-2'></i>

@@ -187,7 +187,7 @@ const AddStudent = () => {
 
           <div className='col-12'>
             <button type='submit' className='btn btn-primary w-100'>
-              Add Employee
+              Add Student
             </button>
           </div>
         </form>

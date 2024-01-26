@@ -1,0 +1,156 @@
+.card {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    margin-bottom: 20px;
+}
+
+.card .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card .text img {
+    height: 170px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.card .text h3 {
+    font-size: 40px;
+    font-weight: 400;
+}
+
+
+.card .text p:nth-of-type(2) {
+    margin: 10px;
+    width: 90%;
+    text-align: center;
+}
+
+
+/* Additional styling for the student detail card */
+.student-detail-img {
+    width: 50%;
+}
+
+.card-body {
+    margin-top: 20px;
+}
+
+.card-title {
+    font-size: 24px;
+}
+
+.card-text {
+    margin-top: 10px;
+}
+
+.links {
+    margin-top: 20px;
+}
+
+.btn-flip {
+    opacity: 1;
+    outline: 0;
+    color: #fff;
+    line-height: 40px;
+    position: relative;
+    text-align: center;
+    letter-spacing: 1px;
+    display: inline-block;
+    text-decoration: none;
+    font-family: 'Open Sans';
+    text-transform: uppercase;
+
+    &:hover {
+
+        &:after {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        &:before {
+            opacity: 0;
+            transform: translateY(50%) rotateX(90deg);
+        }
+
+        @media (max-width: 768px) {
+            font-size: 14px;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 10px;
+        }
+    }
+
+    &:after {
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+        color: #323237;
+        display: block;
+        transition: 0.5s;
+        position: absolute;
+        background: #adadaf;
+        content: attr(data-back);
+        transform: translateY(-50%) rotateX(90deg);
+    }
+
+    &:before {
+        top: 0;
+        left: 0;
+        opacity: 1;
+        color: #adadaf;
+        display: block;
+        padding: 0 30px;
+        line-height: 40px;
+        transition: 0.5s;
+        position: relative;
+        background: #323237;
+        content: attr(data-front);
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .card {
+        width: 90%;
+    }
+
+    .student-detail-img {
+        width: 70%;
+    }
+
+    .card-body {
+        margin-top: 10px;
+    }
+
+    .card-title {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .student-detail-img {
+        width: 90%;
+    }
+
+    .card-text {
+        margin-top: 5px;
+    }
+
+    .btn-flip {
+        line-height: 30px;
+    }
+}

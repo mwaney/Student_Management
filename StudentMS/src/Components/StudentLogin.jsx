@@ -31,6 +31,7 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         if (result.data.loginStatus) {
+          localStorage.setItem("valid", true);
           navigate("/student_detail/" + result.data.id);
         } else {
           setError(result.data.Error);

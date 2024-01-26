@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./Components/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import Home from "./Components/Home";
 import Student from "./Components/Student";
@@ -13,17 +13,33 @@ import EditStudent from "./Components/EditStudent";
 import Front from "./Components/Front";
 import StudentLogin from "./Components/StudentLogin";
 import StudentDetail from "./Components/StudentDetail";
+import { useEffect } from "react";
+import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/front' element={<Front />}></Route>
+          <Route path='/' element={<Front />}></Route>
           <Route path='/adminlogin' element={<Login />}></Route>
           <Route path='/student_login' element={<StudentLogin />}></Route>
-          <Route path='/student_detail/:id' element={<StudentDetail />}></Route>
-          <Route path='/dashboard' element={<Dashboard />}>
+          <Route
+            path='/student_detail/:id'
+            element={
+              <PrivateRoute>
+                <StudentDetail />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path='/dashboard'
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          >
             <Route path='' element={<Home />}></Route>
             <Route path='/dashboard/student' element={<Student />}></Route>
             <Route path='/dashboard/course' element={<Course />}></Route>
